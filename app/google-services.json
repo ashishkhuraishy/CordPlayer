@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "451466311003",
+    "firebase_url": "https://discordplayer-a4f57.firebaseio.com",
+    "project_id": "discordplayer-a4f57",
+    "storage_bucket": "discordplayer-a4f57.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451466311003:android:a51f4e3570203632",
+        "android_client_info": {
+          "package_name": "com.example.cordplayer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "451466311003-1vkcr79s6bech1srj2bgq3ebq5fpclgb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cordplayer",
+            "certificate_hash": "915879856af954dbdbe56ac55b6bd9d2dd63f461"
+          }
+        },
+        {
+          "client_id": "451466311003-8kl8htp7vdpscu0fr0bbs02leklcf3b5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCksfUqsQQAzZLDKSh4Ly83kr1Bt_iWOKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "451466311003-8kl8htp7vdpscu0fr0bbs02leklcf3b5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
