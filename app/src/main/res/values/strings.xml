@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CordPlayer</string>
+    <string name="hint_display_name">Display Name</string>
 </resources>

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -18,10 +19,10 @@ import com.google.firebase.database.IgnoreExtraProperties;
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
-    private EditText userName, songName, artistName, albumName;
+    private TextInputEditText userName;
     private Button buttonField;
 
-    private String user, song, artist, album;
+    private String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +30,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        userName = (EditText) findViewById(R.id.userName);
-        songName = (EditText) findViewById(R.id.songName);
-        artistName = (EditText) findViewById(R.id.artistName);
-        albumName = (EditText) findViewById(R.id.albumName);
+        userName = (TextInputEditText) findViewById(R.id.userName);
 
-        Button buttonField = (Button) findViewById(R.id.buttonView);
+        buttonField = (Button) findViewById(R.id.buttonView);
 
 
 
@@ -42,14 +40,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
            public void onClick(View view) {
                user = userName.getText().toString();
-               song = songName.getText().toString();
-               artist = artistName.getText().toString();
-               album = albumName.getText().toString();
 
-               mDatabase = FirebaseDatabase.getInstance().getReference(user);
-               mDatabase.child("Song").setValue(song);
-               mDatabase.child("Artist").setValue(artist);
-               mDatabase.child("Album").setValue(album);
+               Toast.makeText(MainActivity.this, "Welcome"+user, Toast.LENGTH_LONG).show();
+
+
+//               mDatabase = FirebaseDatabase.getInstance().getReference(user);
+//               mDatabase.child("Song").setValue("SongName");
+//               mDatabase.child("Artist").setValue("ArtistName");
+//               mDatabase.child("Album").setValue("AlbumName");
            }
        });
 
