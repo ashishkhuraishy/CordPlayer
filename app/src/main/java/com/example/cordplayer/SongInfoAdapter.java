@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -22,15 +21,18 @@ public class SongInfoAdapter extends RecyclerView.Adapter<SongInfoAdapter.SongHo
         this.mSongs = mSongs;
     }
 
-    @NonNull
+
     @Override
-    public SongHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SongHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View listItemView = LayoutInflater.from(context).inflate(R.layout.song_list_details, parent, false);
         return new SongHolder(listItemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SongHolder holder, int position) {
+    public void onBindViewHolder(SongHolder holder, int position) {
+        SongInfo songInfo = mSongs.get(position);
+        holder.songName.setText(songInfo.mSongName);
+        holder.artistName.setText(songInfo.mArtistName);
 
     }
 
