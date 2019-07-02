@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".SongsListActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <ListView
         android:id="@+id/songList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

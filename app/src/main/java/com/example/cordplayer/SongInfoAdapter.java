@@ -1,55 +1,35 @@
 package com.example.cordplayer;
 
-import android.content.Context;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class SongInfoAdapter extends RecyclerView.Adapter<SongInfoAdapter.SongHolder> {
+public class SongInfoAdapter extends ArrayAdapter<SongInfo> {
 
-    ArrayList<SongInfo> mSongs;
-    Context context;
-
-
-    public SongInfoAdapter(Context context, ArrayList<SongInfo> mSongs) {
-        this.context = context;
-        this.mSongs = mSongs;
-    }
-
-
-    @Override
-    public SongHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View listItemView = LayoutInflater.from(context).inflate(R.layout.song_list_details, parent, false);
-        return new SongHolder(listItemView);
+    public SongInfoAdapter(Activity context, ArrayList<SongInfo> songInfos) {
+        super(context, 0, songInfos);
     }
 
     @Override
-    public void onBindViewHolder(SongHolder holder, int position) {
-        SongInfo songInfo = mSongs.get(position);
-        holder.songName.setText(songInfo.mSongName);
-        holder.artistName.setText(songInfo.mArtistName);
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return mSongs.size();
-    }
-
-    public class SongHolder extends RecyclerView.ViewHolder {
-
-        TextView songName, artistName;
-
-        public SongHolder(View itemView) {
-            super(itemView);
-
-            songName = (TextView) itemView.findViewById(R.id.songName);
-            artistName = (TextView) itemView.findViewById(R.id.artistName);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View listItemView = convertView;
+        if(listItemView == null){
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.song_list_details, parent, false);
         }
+
+        SongInfo currentPosition = getItem(position);
+
+        TextView songName = (TextView) listItemView.findViewById(R.id.songName);
+        songName.setText(currentPosition.getmSongName());
+
+        TextView artistName = (TextView) listItemView.findViewById(R.id.artistName);
+        artistName.setText(currentPosition.getmArtistName());
+
+        return listItemView;
     }
 }

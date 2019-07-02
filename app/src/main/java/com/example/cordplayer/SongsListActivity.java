@@ -8,24 +8,25 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Selection;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.security.Permission;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class SongsListActivity extends AppCompatActivity {
 
-    ArrayList<SongInfo> mSongs = new ArrayList<SongInfo>();
-    RecyclerView recyclerView;
+    private DatabaseReference mDatabase;
+
+    ArrayList<SongInfo> mSongs = new ArrayList<>();
+    ListView listView;
     SongInfoAdapter adapter;
     MediaPlayer mediaPlayer;
 
@@ -33,19 +34,26 @@ public class SongsListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.song_list);
-
-        recyclerView = (RecyclerView) findViewById(R.id.songList);
-
         adapter = new SongInfoAdapter(this, mSongs);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), linearLayoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
-
+        listView = (ListView) findViewById(R.id.songList);
+        listView.setAdapter(adapter);
 
         checkPermission();
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                SongInfo currentPosition = (SongInfo) adapterView.getItemAtPosition(i);
+
+                mDatabase = FirebaseDatabase.getInstance().getReference(MainActivity.userName());
+                mDatabase.child("Song").setValue(currentPosition.getmSongName());
+                mDatabase.child("Artist").setValue(currentPosition.getmArtistName());
+                mDatabase.child("Album").setValue(currentPosition.getmAlbum());
+            }
+        });
+
 
     }
 
@@ -74,7 +82,7 @@ public class SongsListActivity extends AppCompatActivity {
                     String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
                     String url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
 
-                    SongInfo s = new SongInfo(name, artist, uri);
+                    SongInfo s = new SongInfo(name, artist, album, uri);
                     mSongs.add(s);
 
                 }while (cursor.moveToNext());
@@ -86,7 +94,7 @@ public class SongsListActivity extends AppCompatActivity {
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,String[] permissions,int[] grantResults) {
 
         switch (requestCode){
             case 123:

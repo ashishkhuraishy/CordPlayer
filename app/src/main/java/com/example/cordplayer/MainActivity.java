@@ -20,11 +20,10 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DatabaseReference mDatabase;
     private TextInputEditText userName;
     private Button buttonField;
 
-    private String user;
+    private static String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
            }
        });
 
+    }
+
+    public static String userName(){
+        return user;
     }
 
 }
