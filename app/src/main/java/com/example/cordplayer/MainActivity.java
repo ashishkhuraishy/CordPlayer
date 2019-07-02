@@ -2,6 +2,7 @@ package com.example.cordplayer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         userName = (TextInputEditText) findViewById(R.id.userName);
 
         buttonField = (Button) findViewById(R.id.buttonView);
+        final TextInputLayout displayNameInput = (TextInputLayout) findViewById(R.id.displayTextInput);
 
 
 
@@ -41,7 +44,13 @@ public class MainActivity extends AppCompatActivity {
            public void onClick(View view) {
                user = userName.getText().toString();
 
-               Toast.makeText(MainActivity.this, "Welcome"+user, Toast.LENGTH_LONG).show();
+               if(user.length() == 0){
+                   displayNameInput.setError("Please Input A Name");
+               }else {
+                   Toast.makeText(MainActivity.this, "Welcome " + user, Toast.LENGTH_LONG).show();
+                   Intent intent = new Intent(MainActivity.this, SongsListActivity.class);
+                   startActivity(intent);
+               }
 
 
 //               mDatabase = FirebaseDatabase.getInstance().getReference(user);
