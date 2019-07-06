@@ -17,9 +17,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -33,7 +35,8 @@ public class SongsListActivity extends AppCompatActivity {
     ArrayList<SongInfo> mSongs = new ArrayList<>();
     ListView listView;
     SongInfoAdapter adapter;
-    TextView songNameNp, artistNameNP;
+    TextView songNameNp, playBtnTxt;
+    MaterialCardView playBtn;
     MediaPlayer mediaPlayer;
     LinearLayout nowPlayingView;
     String songName, artistName, albumName;
@@ -47,17 +50,21 @@ public class SongsListActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         mDatabase = FirebaseDatabase.getInstance().getReference(MainActivity.userName());
         songNameNp = (TextView) findViewById(R.id.songNameNP);
-        artistNameNP = (TextView) findViewById(R.id.artistNameNP);
+        playBtn = (MaterialCardView) findViewById(R.id.playButton);
+        playBtnTxt = (TextView) findViewById(R.id.playBtnTxt);
         nowPlayingView = (LinearLayout) findViewById(R.id.nowPlaying);
         mediaPlayer = new MediaPlayer();
 
         checkPermission();
 
+        songNameNp.setText("Not Playing");
+        playBtn.setVisibility(View.GONE);
+
         mDatabase.child("Song").setValue("Not Playing");
         mDatabase.child("Artist").setValue("Not Playing");
         mDatabase.child("Album").setValue("Not Playing");
 
-        nowPlayingView.setOnClickListener(new View.OnClickListener() {
+        playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(mediaPlayer.isPlaying()){
@@ -65,11 +72,13 @@ public class SongsListActivity extends AppCompatActivity {
                     mDatabase.child("Song").setValue("Not Playing");
                     mDatabase.child("Artist").setValue("Not Playing");
                     mDatabase.child("Album").setValue("Not Playing");
+                    playBtnTxt.setText("Play");
                 }else {
                     mediaPlayer.start();
                     mDatabase.child("Song").setValue(songName);
                     mDatabase.child("Artist").setValue(artistName);
                     mDatabase.child("Album").setValue(albumName);
+                    playBtnTxt.setText("Pause");
                 }
             }
         });
@@ -89,8 +98,8 @@ public class SongsListActivity extends AppCompatActivity {
                 mDatabase.child("Artist").setValue(artistName);
                 mDatabase.child("Album").setValue(albumName);
 
-                songNameNp.setText(currentPosition.getmSongName());
-                artistNameNP.setText(currentPosition.getmArtistName());
+                songNameNp.setText(songName);
+                playBtn.setVisibility(View.VISIBLE);
 
                 nowPlaying(currentPosition.getmUrl());
             }
