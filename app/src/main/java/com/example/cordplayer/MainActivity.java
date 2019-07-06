@@ -3,6 +3,7 @@ package com.example.cordplayer;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -22,47 +23,65 @@ public class MainActivity extends AppCompatActivity {
 
     private TextInputEditText userName;
     private Button buttonField;
+    String prefUser;
+    private static String user = "";
+    SharedPreferences sharedPreferences;
+    TextInputLayout displayNameInput;
 
-    private static String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        sharedPreferences = getSharedPreferences("myPref", MODE_PRIVATE);
         userName = (TextInputEditText) findViewById(R.id.userName);
 
         buttonField = (Button) findViewById(R.id.buttonView);
-        final TextInputLayout displayNameInput = (TextInputLayout) findViewById(R.id.displayTextInput);
+        displayNameInput = (TextInputLayout) findViewById(R.id.displayTextInput);
 
 
+        prefUser = sharedPreferences.getString("user_id", user);
 
-      buttonField.setOnClickListener(new View.OnClickListener() {
-            @Override
-           public void onClick(View view) {
-               user = userName.getText().toString();
+        if(prefUser.length()< 1){
+            Toast.makeText(MainActivity.this, "No User Name", Toast.LENGTH_LONG).show();
+            buttonField.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    user = userName.getText().toString();
+                    sharedPreferences.edit().putString("user_id", user).apply();
 
-               if(user.length() == 0){
-                   displayNameInput.setError("Please Input A Name");
-               }else {
-                   Toast.makeText(MainActivity.this, "Welcome " + user, Toast.LENGTH_LONG).show();
-                   Intent intent = new Intent(MainActivity.this, SongsListActivity.class);
-                   startActivity(intent);
-               }
+                    if(user.length() == 0){
+                        displayNameInput.setError("Please Input A Name");
+                    }else {
+                        Toast.makeText(MainActivity.this, "Welcome " + user, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(MainActivity.this, SongsListActivity.class);
+                        intent.putExtra("userId", user);
+                        startActivity(intent);
+                    }
 
 
 //               mDatabase = FirebaseDatabase.getInstance().getReference(user);
 //               mDatabase.child("Song").setValue("SongName");
 //               mDatabase.child("Artist").setValue("ArtistName");
 //               mDatabase.child("Album").setValue("AlbumName");
-           }
-       });
+                }
+            });
+
+        }else {
+            Toast.makeText(this, "User "+ prefUser ,Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivity.this, SongsListActivity.class);
+            intent.putExtra("userId", prefUser);
+            startActivity(intent);
+        }
+
+
+
+
+
+
 
     }
 
-    public static String userName(){
-        return user;
-    }
 
 }

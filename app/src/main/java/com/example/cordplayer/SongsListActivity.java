@@ -39,16 +39,20 @@ public class SongsListActivity extends AppCompatActivity {
     MaterialCardView playBtn;
     MediaPlayer mediaPlayer;
     LinearLayout nowPlayingView;
-    String songName, artistName, albumName;
+    String songName, artistName, albumName, userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.song_list);
+
+        Bundle bundle = getIntent().getExtras();
+        userId = bundle.getString("userId");
+
         adapter = new SongInfoAdapter(this, mSongs);
         listView = (ListView) findViewById(R.id.songList);
         listView.setAdapter(adapter);
-        mDatabase = FirebaseDatabase.getInstance().getReference(MainActivity.userName());
+        mDatabase = FirebaseDatabase.getInstance().getReference(userId);
         songNameNp = (TextView) findViewById(R.id.songNameNP);
         playBtn = (MaterialCardView) findViewById(R.id.playButton);
         playBtnTxt = (TextView) findViewById(R.id.playBtnTxt);
@@ -139,10 +143,9 @@ public class SongsListActivity extends AppCompatActivity {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 123);
                 return;
-            }
-
+            }loadSongs();
         }
-            loadSongs();
+        loadSongs();
     }
 
 
@@ -171,7 +174,7 @@ public class SongsListActivity extends AppCompatActivity {
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 
         if (requestCode == 123) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
