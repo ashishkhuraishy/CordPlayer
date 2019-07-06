@@ -8,5 +8,38 @@
     <ListView
         android:id="@+id/songList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+
+    <LinearLayout
+        android:id="@+id/nowPlaying"
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:layout_weight="0"
+        android:orientation="horizontal"
+        android:elevation="@dimen/cardview_compat_inset_shadow">
+        <ImageView
+            android:layout_width="88dp"
+            android:layout_height="match_parent"
+            android:src="@mipmap/ic_launcher"
+            android:padding="16dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/songNameNP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Song Name"
+                style="@style/TextAppearance.AppCompat.Title"/>
+            <TextView
+                android:id="@+id/artistNameNP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Artist Name"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

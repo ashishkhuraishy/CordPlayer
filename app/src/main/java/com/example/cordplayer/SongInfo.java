@@ -7,9 +7,9 @@ public class SongInfo {
     String mSongName;
     String mArtistName;
     String mAlbum;
-    Uri mUrl;
+    String mUrl;
 
-    public SongInfo(String mSongName, String mArtistName, String mAlbum ,Uri mUrl ) {
+    public SongInfo(String mSongName, String mArtistName, String mAlbum ,String mUrl ) {
         this.mSongName = mSongName;
         this.mArtistName = mArtistName;
         this.mAlbum = mAlbum;
@@ -29,7 +29,7 @@ public class SongInfo {
         return mAlbum;
     }
 
-    public Uri getmUrl() {
+    public String getmUrl() {
         return mUrl;
     }
 }
