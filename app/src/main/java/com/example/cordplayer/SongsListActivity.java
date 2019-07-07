@@ -49,6 +49,7 @@ public class SongsListActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         userId = bundle.getString("userId");
 
+
         adapter = new SongInfoAdapter(this, mSongs);
         listView = (ListView) findViewById(R.id.songList);
         listView.setAdapter(adapter);
@@ -64,28 +65,23 @@ public class SongsListActivity extends AppCompatActivity {
         songNameNp.setText("Not Playing");
         playBtn.setVisibility(View.GONE);
 
-        mDatabase.child("Song").setValue("Not Playing");
-        mDatabase.child("Artist").setValue("Not Playing");
-        mDatabase.child("Album").setValue("Not Playing");
+        addToDataBase("Not Playing", "Not Playing", "Not Playing");
 
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(mediaPlayer.isPlaying()){
                     mediaPlayer.pause();
-                    mDatabase.child("Song").setValue("Not Playing");
-                    mDatabase.child("Artist").setValue("Not Playing");
-                    mDatabase.child("Album").setValue("Not Playing");
+                    addToDataBase("Not Playing", "Not Playing", "Not Playing");
                     playBtnTxt.setText("Play");
                 }else {
                     mediaPlayer.start();
-                    mDatabase.child("Song").setValue(songName);
-                    mDatabase.child("Artist").setValue(artistName);
-                    mDatabase.child("Album").setValue(albumName);
+                    addToDataBase(songName, artistName, albumName);
                     playBtnTxt.setText("Pause");
                 }
             }
         });
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -97,10 +93,7 @@ public class SongsListActivity extends AppCompatActivity {
                 artistName = currentPosition.getmArtistName();
                 albumName = currentPosition.getmAlbum();
 
-
-                mDatabase.child("Song").setValue(songName);
-                mDatabase.child("Artist").setValue(artistName);
-                mDatabase.child("Album").setValue(albumName);
+                addToDataBase(songName, artistName, albumName);
 
                 songNameNp.setText(songName);
                 playBtn.setVisibility(View.VISIBLE);
@@ -110,6 +103,14 @@ public class SongsListActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    /**Function To add Details Into Database**/
+
+    void addToDataBase(String songName, String artistName, String albumName){
+        mDatabase.child("Song").setValue(songName);
+        mDatabase.child("Artist").setValue(artistName);
+        mDatabase.child("Album").setValue(albumName);
     }
 
 
@@ -136,6 +137,9 @@ public class SongsListActivity extends AppCompatActivity {
 
     }
 
+
+
+    /*Functions To Check The user permission For Readig External Storage*/
 
 
     private void checkPermission() {
