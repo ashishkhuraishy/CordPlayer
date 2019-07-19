@@ -28,7 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SongsListActivity extends AppCompatActivity {
+public class SongsListActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener {
 
     private DatabaseReference mDatabase;
 
@@ -120,16 +120,16 @@ public class SongsListActivity extends AppCompatActivity {
             try {
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(url);
-                mediaPlayer.prepare();
-                mediaPlayer.start();
+                mediaPlayer.setOnPreparedListener(this);
+                mediaPlayer.prepareAsync();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }else {
             try {
                 mediaPlayer.setDataSource(url);
-                mediaPlayer.prepare();
-                mediaPlayer.start();
+                mediaPlayer.setOnPreparedListener(this);
+                mediaPlayer.prepareAsync();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -139,7 +139,7 @@ public class SongsListActivity extends AppCompatActivity {
 
 
 
-    /*Functions To Check The user permission For Readig External Storage*/
+    /**Functions To Check The user permission For Readig External Storage**/
 
 
     private void checkPermission() {
@@ -190,6 +190,11 @@ public class SongsListActivity extends AppCompatActivity {
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        mediaPlayer.start();
     }
 }
 
