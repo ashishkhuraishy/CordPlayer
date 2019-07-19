@@ -15,11 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +33,7 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
     ListView listView;
     SongInfoAdapter adapter;
     TextView songNameNp, playBtnTxt;
-    MaterialCardView playBtn;
+    MaterialCardView playBtn, prevBtn, nextBtn;
     MediaPlayer mediaPlayer;
     LinearLayout nowPlayingView;
     String songName, artistName, albumName, userId;
@@ -54,19 +51,23 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
 
 
         adapter = new SongInfoAdapter(this, mSongs);
-        listView = (ListView) findViewById(R.id.songList);
+        listView = findViewById(R.id.songList);
         listView.setAdapter(adapter);
         mDatabase = FirebaseDatabase.getInstance().getReference(userId);
-        songNameNp = (TextView) findViewById(R.id.songNameNP);
-        playBtn = (MaterialCardView) findViewById(R.id.playButton);
-        playBtnTxt = (TextView) findViewById(R.id.playBtnTxt);
-        nowPlayingView = (LinearLayout) findViewById(R.id.nowPlaying);
+        songNameNp = findViewById(R.id.songNameNP);
+        playBtn = findViewById(R.id.playButton);
+        playBtnTxt = findViewById(R.id.playBtnTxt);
+        prevBtn = findViewById(R.id.prevButton);
+        nextBtn = findViewById(R.id.nextButton);
+        nowPlayingView = findViewById(R.id.nowPlaying);
         mediaPlayer = new MediaPlayer();
 
         checkPermission();
 
         songNameNp.setText("Not Playing");
         playBtn.setVisibility(View.GONE);
+        prevBtn.setVisibility(View.GONE);
+        nextBtn.setVisibility(View.GONE);
 
         addToDataBase("Not Playing", "Not Playing", "Not Playing");
 
@@ -85,6 +86,22 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
             }
         });
 
+        prevBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                position -= 1;
+                play(position);
+            }
+        });
+
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                position += 1;
+                play(position);
+            }
+        });
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -92,6 +109,10 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
 
                 viewAdapter = adapterView;
                 position = i;
+
+                playBtn.setVisibility(View.VISIBLE);
+                prevBtn.setVisibility(View.VISIBLE);
+                nextBtn.setVisibility(View.VISIBLE);
 
                 play(position);
             }
@@ -120,7 +141,6 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
         addToDataBase(songName, artistName, albumName);
 
         songNameNp.setText(songName);
-        playBtn.setVisibility(View.VISIBLE);
 
         nowPlaying(currentPosition.getmUrl());
     }
