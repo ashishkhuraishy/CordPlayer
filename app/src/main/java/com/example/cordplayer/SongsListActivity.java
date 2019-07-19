@@ -40,6 +40,9 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
     MediaPlayer mediaPlayer;
     LinearLayout nowPlayingView;
     String songName, artistName, albumName, userId;
+    AdapterView<?> viewAdapter;
+    int position;
+    SongInfo currentPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,18 +90,10 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                SongInfo currentPosition = (SongInfo) adapterView.getItemAtPosition(i);
+                viewAdapter = adapterView;
+                position = i;
 
-                songName = currentPosition.getmSongName();
-                artistName = currentPosition.getmArtistName();
-                albumName = currentPosition.getmAlbum();
-
-                addToDataBase(songName, artistName, albumName);
-
-                songNameNp.setText(songName);
-                playBtn.setVisibility(View.VISIBLE);
-
-                nowPlaying(currentPosition.getmUrl());
+                play(position);
             }
         });
 
@@ -111,6 +106,23 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
         mDatabase.child("Song").setValue(songName);
         mDatabase.child("Artist").setValue(artistName);
         mDatabase.child("Album").setValue(albumName);
+    }
+
+
+
+    private void play(int pos){
+        currentPosition = (SongInfo) viewAdapter.getItemAtPosition(pos);
+
+        songName = currentPosition.getmSongName();
+        artistName = currentPosition.getmArtistName();
+        albumName = currentPosition.getmAlbum();
+
+        addToDataBase(songName, artistName, albumName);
+
+        songNameNp.setText(songName);
+        playBtn.setVisibility(View.VISIBLE);
+
+        nowPlaying(currentPosition.getmUrl());
     }
 
 
