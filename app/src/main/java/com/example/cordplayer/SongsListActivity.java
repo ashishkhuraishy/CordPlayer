@@ -47,6 +47,7 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
         setContentView(R.layout.song_list);
 
         Bundle bundle = getIntent().getExtras();
+        assert bundle != null;
         userId = bundle.getString("userId");
 
 
@@ -90,7 +91,7 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
             @Override
             public void onClick(View view) {
                 position -= 1;
-                play(position);
+                nowPlaying(position);
             }
         });
 
@@ -98,7 +99,7 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
             @Override
             public void onClick(View view) {
                 position += 1;
-                play(position);
+                nowPlaying(position);
             }
         });
 
@@ -114,7 +115,17 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
                 prevBtn.setVisibility(View.VISIBLE);
                 nextBtn.setVisibility(View.VISIBLE);
 
-                play(position);
+                playBtnTxt.setText("Pause");
+
+                nowPlaying(position);
+            }
+        });
+
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                position++;
+                nowPlaying(position);
             }
         });
 
@@ -131,7 +142,8 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
 
 
 
-    private void play(int pos){
+
+    private void nowPlaying(int pos){
         currentPosition = (SongInfo) viewAdapter.getItemAtPosition(pos);
 
         songName = currentPosition.getmSongName();
@@ -142,32 +154,16 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
 
         songNameNp.setText(songName);
 
-        nowPlaying(currentPosition.getmUrl());
-    }
-
-
-    private void nowPlaying(String url){
-
-        if(mediaPlayer.isPlaying()){
-            try {
-                mediaPlayer.reset();
-                mediaPlayer.setDataSource(url);
-                mediaPlayer.setOnPreparedListener(this);
-                mediaPlayer.prepareAsync();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else {
-            try {
-                mediaPlayer.setDataSource(url);
-                mediaPlayer.setOnPreparedListener(this);
-                mediaPlayer.prepareAsync();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(currentPosition.getmUrl());
+            mediaPlayer.setOnPreparedListener(this);
+            mediaPlayer.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
     }
+
 
 
 
@@ -225,7 +221,7 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
     }
 
     @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
+    public void onPrepared(MediaPlayer mp) {
         mediaPlayer.start();
     }
 }
