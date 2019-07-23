@@ -164,7 +164,10 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
         }
     }
 
-
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        mediaPlayer.start();
+    }
 
 
     /**Functions To Check The user permission For Readig External Storage**/
@@ -220,9 +223,5 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
         }
     }
 
-    @Override
-    public void onPrepared(MediaPlayer mp) {
-        mediaPlayer.start();
-    }
 }
 
