@@ -19,12 +19,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextInputEditText userName;
     private Button buttonField;
     String prefUser;
-    private static String user = "";
+    static String user = "";
     SharedPreferences sharedPreferences;
     TextInputLayout displayNameInput;
 
@@ -34,11 +36,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = getSharedPreferences("myPref", MODE_PRIVATE);
-        userName = (TextInputEditText) findViewById(R.id.userName);
 
-        buttonField = (Button) findViewById(R.id.buttonView);
-        displayNameInput = (TextInputLayout) findViewById(R.id.displayTextInput);
+        sharedPreferences = getSharedPreferences("myPref", MODE_PRIVATE);
+        userName = findViewById(R.id.userName);
+
+        buttonField = findViewById(R.id.buttonView);
+        displayNameInput = findViewById(R.id.displayTextInput);
 
 
         prefUser = sharedPreferences.getString("user_id", user);
@@ -56,11 +59,8 @@ public class MainActivity extends AppCompatActivity {
                     }else {
                         Toast.makeText(MainActivity.this, "Welcome " + user, Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(MainActivity.this, SongsListActivity.class);
-                        intent.putExtra("userId", user);
                         startActivity(intent);
                     }
-
-
 //               mDatabase = FirebaseDatabase.getInstance().getReference(user);
 //               mDatabase.child("Song").setValue("SongName");
 //               mDatabase.child("Artist").setValue("ArtistName");
@@ -69,18 +69,10 @@ public class MainActivity extends AppCompatActivity {
             });
 
         }else {
-            Toast.makeText(this, "User "+ prefUser ,Toast.LENGTH_LONG).show();
             Intent intent = new Intent(MainActivity.this, SongsListActivity.class);
-            intent.putExtra("userId", prefUser);
+            user = prefUser;
             startActivity(intent);
         }
-
-
-
-
-
-
-
     }
 
 

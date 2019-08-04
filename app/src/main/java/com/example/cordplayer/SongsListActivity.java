@@ -1,12 +1,14 @@
 package com.example.cordplayer;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,9 +36,9 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
     SongInfoAdapter adapter;
     TextView songNameNp, playBtnTxt;
     MaterialCardView playBtn, prevBtn, nextBtn;
-    MediaPlayer mediaPlayer;
+    static MediaPlayer mediaPlayer;
     LinearLayout nowPlayingView;
-    String songName, artistName, albumName, userId;
+    static String songName, artistName, albumName, userId;
     AdapterView<?> viewAdapter;
     int position;
     SongInfo currentPosition;
@@ -46,9 +48,7 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.song_list);
 
-        Bundle bundle = getIntent().getExtras();
-        assert bundle != null;
-        userId = bundle.getString("userId");
+        userId = MainActivity.user;
 
 
         adapter = new SongInfoAdapter(this, mSongs);
@@ -129,6 +129,14 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
             }
         });
 
+        nowPlayingView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SongsListActivity.this, PlayingActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -170,7 +178,7 @@ public class SongsListActivity extends AppCompatActivity implements MediaPlayer.
     }
 
 
-    /**Functions To Check The user permission For Readig External Storage**/
+    /**Functions To Check The user permission For Reading External Storage**/
 
 
     private void checkPermission() {

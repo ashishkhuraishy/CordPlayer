@@ -32,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="TextView"
+        android:maxLines="1"
         android:paddingLeft="10dp"/>
         
     </LinearLayout>

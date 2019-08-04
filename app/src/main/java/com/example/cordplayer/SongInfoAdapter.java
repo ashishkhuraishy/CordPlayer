@@ -24,10 +24,10 @@ public class SongInfoAdapter extends ArrayAdapter<SongInfo> {
 
         SongInfo currentPosition = getItem(position);
 
-        TextView songName = (TextView) listItemView.findViewById(R.id.songName);
+        TextView songName = listItemView.findViewById(R.id.songName);
         songName.setText(currentPosition.getmSongName());
 
-        TextView artistName = (TextView) listItemView.findViewById(R.id.artistName);
+        TextView artistName = listItemView.findViewById(R.id.artistName);
         artistName.setText(currentPosition.getmArtistName());
 
         return listItemView;
